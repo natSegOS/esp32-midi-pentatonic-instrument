@@ -49,3 +49,4 @@ def build_scale_definition(
         raise ValueError("The configured scale ranged failed to produce notes")
 
     return ScaleDefinition(midi_notes=ordered_midi_notes)
+
