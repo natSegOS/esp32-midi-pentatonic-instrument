@@ -46,6 +46,6 @@ void handleButtonReleased(unsigned long timestampMs) {
   digitalWrite(LED_PIN, LOW);
 
   Serial.print("UP ");
-  Serial.print(timestampMs);
+  Serial.println(timestampMs);
 }
 
