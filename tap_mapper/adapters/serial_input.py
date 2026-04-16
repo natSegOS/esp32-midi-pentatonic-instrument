@@ -10,7 +10,7 @@ SERIAL_PRESS_TOKEN = "DOWN"
 SERIAL_RELEASE_TOKEN = "UP"
 
 
-class SerialButtonEventSource:
+class SerialInput:
     def __init__(self, config: SerialConfig) -> None:
         self._read_size_bytes = config.read_size_bytes
         self.buffer = b""
@@ -48,13 +48,13 @@ def parse_serial_line(line: str) -> ButtonEvent | None:
     try:
         if parts == [SERIAL_PRESS_TOKEN, parts[1]]:
             return ButtonEvent(
-                event_type=ButtonEventType.BUTTON_PRESSED,
+                event_type=ButtonEventType.PRESS,
                 timestamp_ms=int(parts[1])
             )
 
         if parts == [SERIAL_RELEASE_TOKEN, parts[1]]:
             return ButtonEvent(
-                event_type=ButtonEventType.BUTTON_RELEASED,
+                event_type=ButtonEventType.RELEASE,
                 timestamp_ms=int(parts[1])
             )
     except (IndexError, ValueError):

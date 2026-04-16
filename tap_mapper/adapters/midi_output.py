@@ -84,7 +84,7 @@ class MidiOutput:
             pygame.midi.quit()
 
     @staticmethod
-    def find_prefered_device_id(name_parts: tuple[str, ...]) -> int | None:
+    def find_preferred_device_id(name_parts: tuple[str, ...]) -> int | None:
         normalized_name_parts = tuple(part.lower() for part in name_parts)
 
         for device_id, device_name in MidiOutput.list_output_devices():

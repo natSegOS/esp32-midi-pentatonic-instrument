@@ -17,7 +17,6 @@ class TempoConfig:
     min_bpm: float = 50.0
     max_bpm: float = 220.0
     smoothing_alpha: float = 0.60
-    ms_per_minute: float = 60_000.0
 
 
 @dataclass(frozen=True)
@@ -28,6 +27,8 @@ class ScaleConfig:
     high_note: int = 84 # C6
     start_note: int = 69
     octave_size: int = 12
+    octave_search_below_root: int = 24
+    octave_search_above_root: int = 24
     max_melodic_jump_semitones: int = 5
 
 
