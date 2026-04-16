@@ -6,7 +6,7 @@ The project maps human timing input into constrained melodic motion. It was desi
 
 ## Demo
 
-[![Watch the Demo](media/thumbnail.png)](media/demo.mp4)
+[![Watch the Demo](media/thumbnail.jpg)](media/demo.MP4)
 
 ## Overview
 
