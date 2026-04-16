@@ -13,7 +13,7 @@ SERIAL_RELEASE_TOKEN = "UP"
 class SerialInput:
     def __init__(self, config: SerialConfig) -> None:
         self._read_size_bytes = config.read_size_bytes
-        self.buffer = b""
+        self._buffer = b""
 
         self._serial = serial.Serial(
             config.port,

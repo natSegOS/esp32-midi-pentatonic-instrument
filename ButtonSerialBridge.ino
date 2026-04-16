@@ -1,7 +1,7 @@
 const int BUTTON_PIN = 15;
 const int LED_PIN = 2;
 
-const unsigned long SERIAL_BAUD_RATE = 115200
+const unsigned long SERIAL_BAUD_RATE = 115200;
 const unsigned long DEBOUNCE_DELAY_MS = 20;
 
 bool lastRawButtonState = LOW;
@@ -46,6 +46,6 @@ void handleButtonReleased(unsigned long timestampMs) {
   digitalWrite(LED_PIN, LOW);
 
   Serial.print("UP ");
-  Serial.print(timestampMs);
+  Serial.println(timestampMs);
 }
 
