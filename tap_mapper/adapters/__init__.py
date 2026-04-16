@@ -1,1 +1,1 @@
-"""Stateful adapters for external devices and protocols"""
+"""External I/O adapters"""

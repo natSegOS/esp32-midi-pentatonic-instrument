@@ -4,47 +4,53 @@ from tap_mapper.types import ScaleMode
 
 
 @dataclass(frozen=True)
-class SerialConnectionConfig:
-    port_name: str = "/dev/cu.usbserial-10"
+class SerialConfig:
+    port: str = "/dev/cu.usbserial-10"
     baud_rate: int = 115200
-    timeout_seconds: float = 0.01
+    timeout_s: float = 0.01
+    read_size_bytes: int = 256
 
 
 @dataclass(frozen=True)
-class TempoTrackingConfig:
-    default_beats_per_minute: float = 98.0
-    minimum_beats_per_minute: float = 50.0
-    maximum_beats_per_minute: float = 220.0
-    exponential_smoothing_alpha: float = 0.60
+class TempoConfig:
+    default_bpm: float = 98.0
+    min_bpm: float = 50.0
+    max_bpm: float = 220.0
+    smoothing_alpha: float = 0.60
 
 
 @dataclass(frozen=True)
-class ScaleRangeConfig:
-    root_midi_note: int = 69 # A4
-    scale_mode: ScaleMode = ScaleMode.MINOR_PENTATONIC
-    lowest_midi_note: int = 64 # E4
-    highest_midi_note: int = 84 # C6
-    starting_midi_note: int = 69
+class ScaleConfig:
+    root_note: int = 69 # A4
+    mode: ScaleMode = ScaleMode.MINOR_PENTATONIC
+    low_note: int = 64 # E4
+    high_note: int = 84 # C6
+    start_note: int = 69
+    octave_size: int = 12
+    octave_search_below_root: int = 24
+    octave_search_above_root: int = 24
+    max_melodic_jump_semitones: int = 5
 
 
 @dataclass(frozen=True)
-class MidiPlaybackConfig:
-    channel_number: int = 0
-    note_velocity: int = 112
-    maximum_note_length_milliseconds: int = 6000
-    preferred_output_name_fragments: tuple[str, ...] = ("IAC", "CoreMIDI", "Bus")
+class MidiConfig:
+    channel: int = 0
+    velocity: int = 112
+    max_note_length_ms: int = 6000
+    note_count: int = 128
+    preferred_output_name_parts: tuple[str, ...] = ("IAC", "CoreMIDI", "Bus")
 
 
 @dataclass(frozen=True)
-class RuntimeLoopConfig:
-    idle_sleep_seconds: float = 0.001
+class RuntimeConfig:
+    idle_sleep_s: float = 0.001
 
 
 @dataclass(frozen=True)
-class ApplicationConfig:
-    serial_connection: SerialConnectionConfig = field(default_factory=SerialConnectionConfig)
-    tempo_tracking: TempoTrackingConfig = field(default_factory=TempoTrackingConfig)
-    scale_range: ScaleRangeConfig = field(default_factory=ScaleRangeConfig)
-    midi_playback: MidiPlaybackConfig = field(default_factory=MidiPlaybackConfig)
-    runtime_loop: RuntimeLoopConfig = field(default_factory=RuntimeLoopConfig)
+class AppConfig:
+    serial: SerialConfig = field(default_factory=SerialConfig)
+    tempo: TempoConfig = field(default_factory=TempoConfig)
+    scale: ScaleConfig = field(default_factory=ScaleConfig)
+    midi: MidiConfig = field(default_factory=MidiConfig)
+    runtime: RuntimeConfig = field(default_factory=RuntimeConfig)
 

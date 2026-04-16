@@ -3,8 +3,8 @@ from enum import Enum
 
 
 class ButtonEventType(str, Enum):
-    BUTTON_PRESSED = "BUTTON_PRESSED"
-    BUTTON_RELEASED = "BUTTON_RELEASED"
+    PRESS = "PRESS"
+    RELEASE = "RELEASED"
 
 
 class ScaleMode(str, Enum):
@@ -17,5 +17,5 @@ class ScaleMode(str, Enum):
 @dataclass(frozen=True)
 class ButtonEvent:
     event_type: ButtonEventType
-    timestamp_milliseconds: int
+    timestamp_ms: int
 

@@ -1,55 +1,51 @@
 const int BUTTON_PIN = 15;
 const int LED_PIN = 2;
-const unsigned long DEBOUNCE_DELAY_MILLISECONDS = 20;
+
+const unsigned long SERIAL_BAUD_RATE = 115200
+const unsigned long DEBOUNCE_DELAY_MS = 20;
 
 bool lastRawButtonState = LOW;
 bool stableButtonState = LOW;
-unsigned long lastRawStateChangeTimeMilliseconds = 0;
-unsigned long buttonPressStartTimeMilliseconds = 0;
+unsigned long lastRawChangeMs = 0;
 
 void setup() {
   pinMode(BUTTON_PIN, INPUT);
   pinMode(LED_PIN, OUTPUT);
-  Serial.begin(115200);
+  Serial.begin(SERIAL_BAUD_RATE);
 }
 
 void loop() {
-  const bool currentRawButtonState = digitalRead(BUTTON_PIN);
-  const unsigned long nowMilliseconds = millis();
+  const bool rawButtonState = digitalRead(BUTTON_PIN);
+  const unsigned long nowMs = millis();
 
-  if (currentRawButtonState != lastRawButtonState) {
-    lastRawButtonState = currentRawButtonState;
-    lastRawStateChangeTimeMilliseconds = nowMilliseconds;
+  if (rawButtonState != lastRawButtonState) {
+    lastRawButtonState = rawButtonState;
+    lastRawChangeMs = nowMs;
   }
 
-  if (nowMilliseconds - lastRawStateChangeTimeMilliseconds <= DEBOUNCE_DELAY_MILLISECONDS) { return; }
-  if (currentRawButtonState == stableButtonState) { return; }
+  if (nowMs - lastRawChangeMs <= DEBOUNCE_DELAY_MS) { return; }
+  if (rawButtonState == stableButtonState) { return; }
 
-  stableButtonState = currentRawButtonState;
+  stableButtonState = rawButtonState;
 
   if (stableButtonState == HIGH) {
-    handleButtonPressed(nowMilliseconds);
+    handleButtonPressed(nowMs);
   } else {
-    handleButtonReleased(nowMilliseconds);
+    handleButtonReleased(nowMs);
   }
 }
 
-void handleButtonPressed(unsigned long timestampMilliseconds) {
+void handleButtonPressed(unsigned long timestampMs) {
   digitalWrite(LED_PIN, HIGH);
-  buttonPressStartTimestampMilliseconds = timestampMilliseconds;
 
   Serial.print("DOWN ");
-  Serial.println(timestampMilliseconds);
+  Serial.println(timestampMs);
 }
 
-void handleButtonReleased(unsigned long timestampMilliseconds) {
+void handleButtonReleased(unsigned long timestampMs) {
   digitalWrite(LED_PIN, LOW);
 
-  const unsigned long pressDurationMilliseconds = timestampMilliseconds - buttonPressStartTimestampMilliseconds;
-
   Serial.print("UP ");
-  Serial.print(timestampMilliseconds);
-  Serial.print(" ");
-  Serial.println(pressDurationMilliseconds);
+  Serial.print(timestampMs);
 }
 
