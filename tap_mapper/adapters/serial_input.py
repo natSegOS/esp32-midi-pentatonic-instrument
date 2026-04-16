@@ -2,57 +2,60 @@ from collections.abc import Iterator
 
 import serial
 
+from tap_mapper.config import SerialConfig
 from tap_mapper.types import ButtonEvent, ButtonEventType
 
 
-class SerialButtonEventSource:
-    def __init__(
-        self,
-        *,
-        serial_port_name: str,
-        baud_rate: int,
-        timeout_seconds: float,
-    ) -> None:
-        self._serial_connection = serial.Serial(serial_port_name, baud_rate, timeout=timeout_seconds)
-        self._buffer = b""
+SERIAL_PRESS_TOKEN = "DOWN"
+SERIAL_RELEASE_TOKEN = "UP"
 
-    def read_available_events(self) -> Iterator[ButtonEvent]:
-        incoming_bytes = self._serial_connection.read(256)
-        if not incoming_bytes:
+
+class SerialButtonEventSource:
+    def __init__(self, config: SerialConfig) -> None:
+        self._read_size_bytes = config.read_size_bytes
+        self.buffer = b""
+
+        self._serial = serial.Serial(
+            config.port,
+            config.baud_rate,
+            timeout=config.timeout_s
+        )
+
+    def read_events(self) -> Iterator[ButtonEvent]:
+        chunk = self._serial.read(self._read_size_bytes)
+        if not chunk:
             return
 
-        self._buffer += incoming_bytes
+        self._buffer += chunk
 
         while b"\n" in self._buffer:
-            raw_line_bytes, self._buffer = self._buffer.split(b"\n", 1)
-            parsed_event = parse_button_event_from_serial_line(
-                raw_line_bytes.decode(errors="ignore").strip()
-            )
+            raw_line, self._buffer = self._buffer.split(b"\n", 1)
+            event = parse_serial_line(raw_line.decode(errors="ignore").strip())
 
-            if parsed_event is not None:
-                yield parsed_event
+            if event is not None:
+                yield event
 
     def close(self) -> None:
-        self._serial_connection.close()
+        self._serial.close()
 
 
-def parse_button_event_from_serial_line(serial_line: str) -> ButtonEvent | None:
-    if not serial_line:
+def parse_serial_line(line: str) -> ButtonEvent | None:
+    if not line:
         return None
 
-    parts = serial_line.split()
+    parts = line.split()
 
     try:
-        if parts[0] == "DOWN" and len(parts) == 2:
+        if parts == [SERIAL_PRESS_TOKEN, parts[1]]:
             return ButtonEvent(
                 event_type=ButtonEventType.BUTTON_PRESSED,
-                timestamp_milliseconds=int(parts[1])
+                timestamp_ms=int(parts[1])
             )
 
-        if parts[0] == "UP" and len(parts) >= 2:
+        if parts == [SERIAL_RELEASE_TOKEN, parts[1]]:
             return ButtonEvent(
                 event_type=ButtonEventType.BUTTON_RELEASED,
-                timestamp_milliseconds=int(parts[1])
+                timestamp_ms=int(parts[1])
             )
     except (IndexError, ValueError):
         return None
