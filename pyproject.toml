@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tap-mapper"
+version = "0.1.0"
+description = "A tap-to-MIDI system for studying timing noise and threshold-sensitive output behavior"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+	"pygame",
+	"pyserial"
+]
+
