@@ -46,13 +46,13 @@ def parse_serial_line(line: str) -> ButtonEvent | None:
     parts = line.split()
 
     try:
-        if parts == [SERIAL_PRESS_TOKEN, parts[1]]:
+        if len(parts) == 2 and parts[0] == SERIAL_PRESS_TOKEN:
             return ButtonEvent(
                 event_type=ButtonEventType.PRESS,
                 timestamp_ms=int(parts[1])
             )
 
-        if parts == [SERIAL_RELEASE_TOKEN, parts[1]]:
+        if len(parts) == 2 and parts[0] == SERIAL_RELEASE_TOKEN:
             return ButtonEvent(
                 event_type=ButtonEventType.RELEASE,
                 timestamp_ms=int(parts[1])
