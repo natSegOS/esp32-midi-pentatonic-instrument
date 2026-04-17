@@ -22,7 +22,7 @@
   },
   "analysis_parameters": {
     "representative_bpm": 120.90118230021803,
-    "monte_carlo_runs": 500,
+    "monte_carlo_runs": 1200,
     "seed": 7,
     "threshold_ratios": [
       0.33,
@@ -115,9 +115,9 @@
   },
   "sequence_divergence": {
     "baseline_note_count": 120,
-    "mean_note_divergence_rate_per_run": 0.6035166666666667,
+    "mean_note_divergence_rate_per_run": 0.6037152777777778,
     "median_note_divergence_rate_per_run": 0.6083333333333333,
     "p95_note_divergence_rate_per_run": 0.8083333333333333,
-    "max_note_divergence_rate_per_run": 0.9416666666666667
+    "max_note_divergence_rate_per_run": 0.9583333333333334
   }
 }
